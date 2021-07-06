@@ -1,0 +1,5 @@
+target/*
+/.idea/
+/target/
+abandoned-property-glue-app.iml
+derby.log

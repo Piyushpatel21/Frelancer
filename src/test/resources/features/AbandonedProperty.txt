@@ -1,0 +1,752 @@
+FEATURE: Get the last contact of the client on the account										FEATURE
+										
+Scenario 1: When the last contact is either Mail or Recurring Transaction on the account, then system should get the latest last contact date associated with the account										Scenario
+Given the account with the last contact										GWT
+When the contact on the account is via Mail or Recurring transaction										
+Then the system should get , the latest contact date and contact description associated with the account										
+DATABASE										
+|client id |account number/account id|									
+|2000253302| 	69327122			 |						
+|2000253302| 	75444117			 |									
+|2000253302| 	80927308			 |									
+|2000253302| 	70199446			 |									
+|2000253302| 	66907312			 |									
+|1995945428|	24581222			 |									
+|1995945428|	66045785			 |									
+|1995945428|	67261148			 |									
+|1995945428|	33008119			 |									
+										
+DATABASE										
+|client id	|account number/account id|	transaction type               |channel|transaction code|contact date	|				
+|2000253302 |	75444117	          |Money Market Direct Deposit     |SYS    |DDPR	        |3/20/2020	    |				
+|2000253302 |			              |DTC Deposit	                   |SYS	   |DTC		        |3/9/2020	    |					
+|2000253302 |			              |Check received                  |SYS	   |CSR		        |3/9/2020	    |					
+|2000253302 |			              |Death Distribution              |SYS	   |DEA		        |2/12/2020	    |			
+|2000253302 |	69327122	          |Maintain Beneficiary Information|MAIL   |		        |2/12/2020	    |					
+|1995945428	|24581222		          |Withdrawal by check	           |BTC	   |	            |8/3/2020	    |					
+|1995945428	|66045785		          |SELL	                           |MAIL   |		        |4/17/2020	    |					
+|1995945428	|67261148		          |Direct Deposit	               |SYS	   |DDP		        |7/31/2020	    |					
+|1995945428	|33008119		          |Money Market Direct Deposit     |SYS	   |DDPR	        |7/31/2020	    |					
+										
+TABLE:										
+|client id |	account number/account id|channel          | basic date contact| Web date contact	|Non-recurring date contact| recurring date contact| Mail date contact|related date contact 		
+|2000253302| 	69327122	             |MAIL	           |			       |	2/12/2020			
+|2000253302| 	75444117	             |	TRANS          |			3/20/2020					
+|2000253302| 	80927308	             |	TRANS          |			3/20/2020					
+|2000253302| 	70199446	             |	TRANS          |			3/20/2020					
+|2000253302| 	66907312	             |	TRANS          |			3/20/2020					
+|1995945428|	24581222	             |	RECURRING TRANS|				8/3/2020				
+|1995945428|	66045785	             |	TRANS          |			4/17/2020					
+|1995945428|	67261148	             |	RECURRING TRANS|				7/31/2020				
+|1995945428|	33008119	             |	RECURRING TRANS|				7/31/2020				
+										
+										
+Scenario 2: When the last contact is either Non- recurring transcation or Phone Authentication(PHAU) or WEB LOGON, then all the accounts associated under the client should have the latest last contact date.										Scenario
+Given the client id										GWT
+When the clients has last contact either Non- recurring transfer or Phone Authentication(PHAU) or WEB LOGON										
+Then the system should get the latest last contact date, contact description for all the accounts associated with the client										
+DATABASE										
+client id	account number/account id									
+1925224921 	31929584									
+1925224921 	28968932									
+1925224921 	17164727									
+1925224921 	37796528									
+1925224921 	50786976									
+1132856956 	778563909061601									
+1132856956 	778563909061602									
+1132856956 	778563909061603									
+										
+DATABASE										
+client id	account number/account id	transaction type	channel	contact date	contact code	sub contact type code				
+1925224921 	31929584	Maintain Date of Birth	WEB	5/13/2020	WEB	WEB4				
+1925224921 		Add Restriction	TRANS	2/27/2020						
+1925224921 	31929584	Maintain Automatic Withdrawal Plan	TRANS	1/2/2019						
+1132856956 	778563909061601	Maintain Beneficiary Information	Phone	8/21/2018	PH	PASD				
+										
+TABLE:										
+client id	account number	channel	 basic date contact (PHAU)	 Web date contact	 non recurring date contact	 recurring date contact	 Mail date contact	related date contact 		
+1925224921 	31929584	WEB LOGON		5/13/2020						
+1925224921 	28968932	RELATED						5/13/2020		
+1925224921 	17164727	RELATED						5/13/2020		
+1925224921 	37796528	RELATED						5/13/2020		
+1925224921 	50786976	RELATED						5/13/2020		
+1132856956 	778563909061601	PHAU	8/21/2018							
+1132856956 	778563909061603	RELATED						8/21/2018		
+1132856956 	778563909061603	RELATED						8/22/2018		
+										
+Scenario 3: When the last contact on the account is from Secondary owner, and no contact by Primary on the account, then only the associated account will get the last contact date by the Secondary.										Scenario
+Given the TA or Brokerage account having the Primary and Secondary owner on the account										GWT
+When the last contact is from the Secondary owner on the account										
+Then the system will get the last contact date and description associated with the Secondary owner										
+DATABASE										
+client id	account number/account id	client role	transaction type	channel	contact date	contact code	sub contact type code			
+1380665314	82421619	PRRT								
+1380665314	82421619	SHJS								
+667026344	82421619	SHJS	Maintain Beneficiary Information	Phone	12/11/2018	PH	PASD			
+1380665314	82421679	TRTR			5/18/2020					
+2005212803	82421679	SHSH	Sweep in	TRANS	5/18/2020					
+1380665314	50594648	BNBN								
+1931544410	50594648	SHMN	Dividend	TRANS	7/31/2020					
+										
+TABLE:										
+client id	account number/account id	client role	channel	 basic date contact (PHAU)	 Web date contact	 non recurring date contact	 recurring date contact	 Mail date contact	related date contact 	
+667026344	82421619	SHJS	PHAU	12/11/2018						
+2005212803	82421679	SHSH	TRANS				5/18/2020			
+1931544410	50594648	SHMN	TRANS				7/31/2020			
+										
+Scenario 4: When the tax form 1099x/1042s was sent to the client through physical mail with no RPO on the account with in the last 4 years then get the last contact date when Tax form was sent										
+Given the TA or Brokearsge account id										
+When the 1099x/1042s was sent with in the last 4 years										
+And account has no RPO status when the mail was sent										
+Then get the last contact date when the Tax form was generated										
+DATABASE										
+account id	1099x/1042s	RPO flag	last contact date							
+1234	1099DIV	N	11/3/2018							
+5678	1099R	Y	10/23/2019							
+1009	1042s	N	4/12/2020							
+										
+										
+TABLE:										
+account id	1099x/1042s	RPO flag	last contact date							
+1234	1099DIV	N	11/3/2018							
+5678										
+1009	1042s	N	4/12/2020							
+										
+										
+										
+										
+Scenario 5: When the client has VBO account and other TA/VBS/VBA accounts and the last contact was on the VBO account, then get the last contact date on the VBO account as Related contact date for other accounts										
+Given the client with VBO and TA/VBA/VBS accounts										
+When the last contact by the client is on the VBO account										
+Then get the last contact date as the related on the other accounts associated with the client										
+DATABASE										
+client id	account id	account type	contact channel	last contact						
+123456789	1001	VBO	PHAU	12/23/2017						
+123456789	1002	VBA								
+123456789	1003	TA								
+										
+TABLE:										
+client id	account id	account type	contact channel	last contact						
+123456789	1002	VBA	RELATED	12/23/2017						
+123456789	1003	TA	RELATED	12/23/2017						
+										
+FEATURE 2: Get the Account status, Account open date , Retirement Plan type code and Registration type code for all the TA and Brokerage accounts									
+									
+Scenario 1: Get all the Open and marginal accounts 									
+Given the TA  or Brokerage account (VBA or VBS)									
+When the account is open or marginal									
+Then get the account with the account open date and the account status									
+DATABASE									
+account id	BETA account number	serv id	account open date	effective end date	account status				
+518804326101235	69744255	90	6/11/2016	12/31/9999	Open				
+6545366545665	32391954	90	3/10/2016	12/31/9999	Marginal				
+6453457789990		8	4/28/2017	12/31/9999	Open				
+									
+AUDIT TABLE:									
+account id	BETA account number	account type	account open date	account status					
+518804326101235	69744255	VBA	6/11/2016	Open					
+6545366545665	32391954	VBA	3/10/2016	Marginal					
+6453457789990		TA	4/28/2017	Open					
+									
+Scenario 2: Get the closed account only if the account has positive balance									
+Given the TA  or Brokerage account (VBA or VBS)									
+When the account is closed									
+And the account has positive balance									
+Then get the account with the account open date and the account status									
+DATABASE									
+account id	BETA account number	serv id	account open date	effective end date	account status	account balance			
+292243813104719	82748065	90	3/1/1999	3/12/2017	Closed	$0 			
+593396323000426		8	2/1/2004	12/5/2009	Closed	$100.00 			
+									
+AUDIT TABLE:									
+account id	BETA account number	account type	account open date	account status					
+593396323000426		TA	2/1/2004	Closed					
+									
+Scenario 3: Get the TA and Brokerage accounts having the retirement plan type code 0000 or 0001 or 0002 or 0003 or 0004 or 0005 or 0006 or 0007 or 0008 or 0009 or 0010 or 0011 or 0012 or 0013 or 0014 or 0015 or 0016 or 0017or 0018 or 0019 or 0020 or 0021 or 0022 or 0023 or 0099 or 0100									
+Given the TA  or Brokerage account (VBA or VBS)									
+When the account has one of the retirement plan type code is 0001 or 0002 or 0003 or 0004 or0005 or 0006 or 0007 or 0008 or 0009 or 0010 or 0011 or 0012 or 0013 or 0014 or 0015 or 0016 or 0017or 0018 or 0019 or 0020 or 0021 or 0022 or 0023 or 0099 or 0100									
+Then the system will return account id, BETA account number (Brokerage accounts), account type and retirement plan type code 									
+DATABASE									
+account id	BETA account number	serv id	retirement plan type code						
+518804326101235	69744255	90	0						
+6545366545665	32391954	90	1						
+372456813105049	44456344	90	2						
+429513308131149	51913116	90	3						
+6453457789990		8	4						
+909401813104716	88607009	90	5						
+292243813104719	82748065	90	6						
+595957925161310	56446107	90	7						
+338354916110729	70067182	90	8						
+103516815233413	24144756	90	9						
+695829330095022	63073739	90	10						
+50894422111751		38	11						
+226771307084628		38	12						
+841991612151425		8	13						
+247284611141148		38	14						
+593396323000426		8	15						
+546879817151649		8	16						
+28060813105051	46412170	90	17						
+466590530123254		8	18						
+482495813105052	81175081	90	19						
+391792514102312		38	20						
+628279619103530		38	21						
+971336430150920	26222980	90	22						
+370738606091658	51776997	9	23						
+78672806152829	31164120	9	99						
+836102827161444	13471929	9	100						
+									
+TABLE									
+account id	BETA account number	account type	retirement plan type code						
+518804326101235	69744255	VBA	0						
+6545366545665	32391954	VBA	1						
+372456813105049	44456344	VBA	2						
+429513308131149	51913116	VBA	3						
+6453457789990		TA	4						
+909401813104716	88607009	VBA	5						
+292243813104719	82748065	VBA	6						
+595957925161310	56446107	VBA	7						
+338354916110729	70067182	VBA	8						
+103516815233413	24144756	VBA	9						
+695829330095022	63073739	VBA	10						
+50894422111751		TA	11						
+226771307084628		TA	12						
+841991612151425		TA	13						
+247284611141148		TA	14						
+593396323000426		TA	15						
+546879817151649		TA	16						
+28060813105051	46412170	VBA	17						
+466590530123254		TA	18						
+482495813105052	81175081	VBA	19						
+391792514102312		TA	20						
+628279619103530		TA	21						
+971336430150920	26222980	VBA	22						
+370738606091658	51776997	VBS	23						
+78672806152829	31164120	VBS	99						
+836102827161444	13471929	VBS	100						
+									
+Scenario 4: Get all the TA and Brokerage accounts having the registration plan type code 									
+Given the TA  or Brokerage account (VBA or VBS)									
+When the account has one of the registration plan type code is 0000,0001,0002,0004,0005,0007,0008,0009,0010,0011,0012,0013,0016,0017,0018,0019,0020,0022,0023,0024,0097,0098,0099									
+Then the system will return account id, BETA account number, account type and registration plan type code									
+DATABASE									
+account id	BETA account number	serv id	registration type code						
+518804326101235	69744255	90	0						
+6545366545665	32391954	90	1						
+909401813104716	88607009	90	2						
+429513308131149	51913116	90	4						
+372456813105049	44456344	90	5						
+50894422111751		38	7						
+103516815233413	24144756	90	8						
+338354916110729	70067182	90	9						
+841991612151425		8	10						
+695829330095022	63073739	90	11						
+247284611141148		38	12						
+593396323000426		8	13						
+466590530123254		8	16						
+482495813105052	81175081	90	17						
+391792514102312		38	18						
+628279619103530		38	19						
+971336430150920	26222980	90	20						
+78672806152829	31164120	9	22						
+836102827161444	13471929	9	23						
+226771307084628		38	24						
+370738606091658	51776997	9	97						
+28060813105051	46412170	90	98						
+546879817151649		8	99						
+									
+TABLE									
+account id	BETA account number	account type	registration type code						
+518804326101235	69744255	VBA	0						
+6545366545665	32391954	VBA	1						
+909401813104716	88607009	VBA	2						
+429513308131149	51913116	VBA	4						
+372456813105049	44456344	VBA	5						
+50894422111751		TA	7						
+103516815233413	24144756	VBA	8						
+338354916110729	70067182	VBA	9						
+841991612151425		TA	10						
+695829330095022	63073739	VBA	11						
+247284611141148		TA	12						
+593396323000426		TA	13						
+466590530123254		TA	16						
+482495813105052	81175081	VBA	17						
+391792514102312		TA	18						
+628279619103530		TA	19						
+971336430150920	26222980	VBA	20						
+78672806152829	31164120	VBS	22						
+836102827161444	13471929	VBS	23						
+226771307084628		TA	24						
+370738606091658	51776997	VBS	97						
+28060813105051	46412170	VBA	98						
+546879817151649		TA	99						
+									
+Feature 3: In order to get the client level data, system will get Client id (POID) , Client type, Deceased status , Date of Death, Client Role, Mail preference, Date of Birth and Social Security Number (SSN) on the account										
+										
+Scenario 1: System should get the clients associated with the account										Scenario
+Given the TA or Brokerage account										GWT
+When the account has multiple clients associated with the account										
+Then system should get the poid's associated with the account										
+DATABASE										
+account id 	account number	client id	client role							
+63685230081252	50594648	1380665314	PRRT							
+63685230081252	50594648	1380665314	SHSH							
+63685230081252	50594648	1931544410	SHMN							
+571465231015657	82421679	1380665314	PRRT							
+571465231015657	82421679	1380665314	SHSH							
+571465231015657	82421679	667026344	BEBE							
+457272231015601	82421541	1380665314	PRRT							
+457272231015601	82421541	1380665314	SHSH							
+613239231015630	82421619	1380665314	PRRT							
+613239231015630	82421619	1380665314	SHJS							
+613239231015630	82421619	667026344	SHJS							
+										
+TABLE:										
+account id 	account number	client id	client role							
+63685230081252	50594648	1380665314	PRRT							
+63685230081252	50594648	1380665314	SHSH							
+63685230081252	50594648	1931544410	SHMN							
+571465231015657	82421679	1380665314	PRRT							
+571465231015657	82421679	1380665314	SHSH							
+571465231015657	82421679	667026344	BNBN							
+457272231015601	82421541	1380665314	PRRT							
+457272231015601	82421541	1380665314	SHSH							
+613239231015630	82421619	1380665314	PRRT							
+613239231015630	82421619	1380665314	SHJS							
+613239231015630	82421619	667026344	SHJS							
+										
+Scenario 2: For the TA or Brokerage account, the system will get Client type, Deceased status , Client Role, Date of Birth and Social Security Number (SSN) on the account.										Scenario
+Given the TA or Brokerage account										GWT
+When the account has one or multiple client ids associated										
+Then the system will return Client type, Deceased status ,date of birth, date of death and social security number										
+DATABASE										
+client id	client type	deceased status	client role	date of birth	social security number	date of death				
+2000253302	P	N	PRRT	10/6/1959	202561058					
+2005091541	P	N	SHJS	10/1/1930	100729861					
+1964781001	P	N	CUCU	11/12/1939	100917212					
+20052177039	O		SHSH		123431231					
+43340998	O		SHSH		103014716					
+2005555613	P	Y	PRRT	6/15/1942	369636321	5/25/2019				
+										
+ TABLE:										
+client id	client type	deceased status	client role	date of birth	social security number	date of death				
+2000253302	P	N	PRRT	10/6/1959	202561058					
+2005091541	P	N	SHJS	10/1/1930	100729861					
+1964781001	P	N	CUCU	11/12/1939	100917212					
+20052177039	O		SHSH		123431231					
+43340998	O		SHSH		103014716					
+2005555613	P	Y	PRRT	6/15/1942	369636321	5/25/2019				
+										
+Note : For the client type as Organization (O) , deceased flag is blank in the database										
+										
+"Scenario 3: System will get the Mail preference of the client for:
+1. Statements and annual privacy policy notice
+2. Confirmations
+3. Reports, prospectuses, and proxy materials
+4. Future fund reports and prospectuses
+5. Notices, amendments, and other important account updates
+6. Tax forms
+7. Year-End Statement
+     "										Scenario
+Given the client id										GWT
+When the client has the Mail preference										
+"Then the system will get the Mail preference for:
+1. Statements and annual privacy policy notice
+2. Confirmations
+3. Reports, prospectuses, and proxy materials
+4. Future fund reports and prospectuses
+5. Notices, amendments, and other important account updates
+6. Tax forms
+7. Year-End Statement"										
+DATABASE										
+client id	Statements and annual privacy policy notice	Confirmations	Reports, prospectuses, and proxy materials	Future fund reports and prospectuses	Notices, amendments, and other important account updates	Tax forms	Year-End Statement			
+1380665314	Mail	Mail	Mail	Mail	Mail	Mail	Mail			
+667026344										
+472923661										
+389122461	Mail	Mail	Mail	Mail	Mail	Mail	Mail			
+1045806084	Email	Email	Email	Email	Email	Email	Mail			
+TABLE:										
+client id	Statements and annual privacy policy notice	Confirmations	Reports, prospectuses, and proxy materials	Future fund reports and prospectuses	Notices, amendments, and other important account updates	Tax forms	Year-End Statement			
+1380665314	Mail	Mail	Mail	Mail	Mail	Mail	Mail			
+667026344										
+472923661										
+389122461	Mail	Mail	Mail	Mail	Mail	Mail	Mail			
+1045806084	Email	Email	Email	Email	Email	Email	Mail			
+										
+FEATURE 4 : System should get the Mailing (Registration) address on the account												FEATURE
+												
+Scenario 1: System should get the Mailing address on the account												Scenario
+Given The TA account												GWT
+When the Mailing address is available on the account												
+Then system should get the street address lines 1 to 4, city, zip code, zip plus 4, state code, foreign address flag												
+DATABASE												
+account id	street address line 1	street address line 2	street address line 3	street address line 4	city name	state code	country code	zip code	zip plus 4	foreign flag		
+88006070687	1212 Academy Rd	Ste #56			Philadelphia	PA		19154		N		
+88001444959	50 Morehall Road	P.O.Box 2600			Malvern	PA	US	19355	1763	N		
+20035107170	20373 W Pine Street				Palmer	AK		99645	9800	N		
+20051913116	5779 W Pine Str				Advance	NC	US	27006		N		
+35412345678					Edison	NJ	US	12345		N		
+												
+ TABLE:												
+account id	street address line 1	street address line 2	street address line 3	street address line 4	city name	state code	country code	zip code	zip plus 4	foreign flag		
+88006070687	1212 Academy Rd	Ste #56			Philadelphia	PA		19154		N		
+88001444959	50 Morehall Road	P.O.Box 2600			Malvern	PA	US	19355	1763	N		
+20035107170	20373 W Pine Street				Palmer	AK		99645	9800	N		
+20051913116	5779 W Pine Str				Advance	NC	US	27006		N		
+35412345678					Edison	NJ	US	12345		N		
+												
+Scenario 2: System should get the Registration address on the Brokerage account												Scenario
+Given The Brokerage account												GWT
+When the Registration address is available on the account												
+Then system should get the registration address lines 1 to 6, city, zip code, zip plus 4, state code, foreign address flag												
+DATABASE												
+account id	registration address line 1	registration address line 2	registration address line 3	registration address line 4	registration address line 5	registration address line 6	city name	state code	country code	zip plus 4	zip plus 4	foreign flag
+21722152323	ECKERT SEAMANS 401(K) 	VFTC AS TRUSTEE 	FBO C PETER CARLUCCI JR 	213 MARKET ST FL 8	HARRISBURG PA 17101-2141 		HARRISBURG	PA	US		17101	N
+76000076717	DEL E BRADY & 	DORIS J BRADY 	JT TEN	11862 E CONCORD RD 	SAINT LOUIS MO           63128		SAINT LOUIS 	MO			63128	N
+150000150235	LAWRENCE E RASTOFER 	TRAD IRA VFTC AS CUSTODIAN	1742 E MELLOW TRL	ORO VALLEY AZ 85755-8798 			ORO VALLEY 	AZ	US		85755	N
+												
+ TABLE:												
+account id	registration address line 1	registration address line 2	registration address line 3	registration address line 4	registration address line 5	registration address line 6	city name	state code	country code	zip plus 4	zip plus 4	foreign flag
+21722152323	ECKERT SEAMANS 401(K) 	VFTC AS TRUSTEE 	FBO C PETER CARLUCCI JR 	213 MARKET ST FL 8	HARRISBURG PA 17101-2141 		HARRISBURG	PA	US		17101	N
+76000076717	DEL E BRADY & 	DORIS J BRADY 	JT TEN	11862 E CONCORD RD 	SAINT LOUIS MO           63128		SAINT LOUIS 	MO			63128	N
+150000150235	LAWRENCE E RASTOFER 	TRAD IRA VFTC AS CUSTODIAN	1742 E MELLOW TRL	ORO VALLEY AZ 85755-8798 			ORO VALLEY 	AZ	US		85755	N
+												
+Scenario 3: When the TA  account has the Foreign address it should follow 'DE' State 										Scenario		
+Given the TA account										GWT		
+When the account has the Foreign address												
+Then the account should follow 'DE ' State 												
+DATABASE												
+account no/VAST no	street address line 1	street address line 2	street address line 3	street address line 4	city name	state code	country code	zip code	zip plus 4	foreign flag		
+9896581569	8977 ROMANCE WAY			_		_	AC			Y		
+88003428397	SRI KRISHNA NAGAR	DSNR	HYDERABAD			_	IN			Y		
+												
+TABLE:												
+account no/VAST no	street address line 1	street address line 2	street address line 3	street address line 4	city name	state code	country code	zip code	zip plus 4	foreign flag	State Follow	
+9896581569	8977 ROMANCE WAY			_		_	AC			Y	DE	
+88003428397	SRI KRISHNA NAGAR	DSNR	HYDERABAD			_	IN			Y	DE	
+												
+Scenario 4: When the Brokerage  account has the Foreign address it should follow 'PA' State 										Scenario		
+Given the brokerage account										GWT		
+When the account has the Foreign address												
+Then the account should follow 'PA ' State 												
+DATABASE												
+account no/VAST no	registration address line 1	registration address line 2	registration address line 3	registration address line 4	registration address line 5	registration address line 6	city name	state code	country code	zip plus 4	zip plus 4	foreign flag
+61642116	RGRAHAM CRACKER MAYES	85 BY 2RT							IN			Y
+54149064	DESTINY WOOD	124 MAIN STREET	ATHENS				_		GR			Y
+												
+TABLE:												
+account no/VAST no	registration address line 1	registration address line 2	registration address line 3	registration address line 4	registration address line 5	registration address line 6	city name	state code	country code	zip plus 4	zip plus 4	foreign flag
+61642116	RGRAHAM CRACKER MAYES	85 BY 2RT		_		_			IN	Y		Y
+54149064	DESTINY WOOD	124 MAIN STREET	ATHENS			_			GR	Y		Y
+												
+Scenario 5: When the client type is a person, system should get the client's First, Middle and Last Name												Scenario
+Given The TA or Brokerage account												GWT
+When the client type is a 'Person' (P)												
+Then system should get the first, middle and Last client name												
+DATABASE												
+client id	client type	first name	middle name	last name								
+2000253302	P	Croryclair		Acegunther								
+2005091541	P	Trapper		French								
+1964781001	P	Abigail	Hill	Advisory								
+20051022354	P	Michael		Moser								
+												
+ TABLE:												
+client id	client type	first name	middle name	last name								
+2000253302	P	Croryclair		Acegunther								
+2005091541	P	Trapper		French								
+1964781001	P	Abigail	Hill	Advisory								
+20051022354	P	Michael		Moser								
+												
+												
+Scenario 6: When the client type is an Organization, system should get the Organization Name												Scenario
+Given The TA or Brokerage account												GWT
+When the client type is a 'Organization' (O)												
+Then system should get the Organization name												
+DATABASE												
+client id	client type	org name										
+2005565315	O	Lobster Claw Et										
+2005219160	O	Bello Securities										
+												
+TABLE:												
+client id	client type	Organization name										
+2005565315	O	Lobster Claw Et										
+2005219160	O	Bello Securities										
+
+Feature 5: In order to get RPO status , system will check for the status code (for TA = 04) and restriction (for VBA = RPO%) on the account 										
+										
+Scenario 1: For the TA account, if any one position has RPO status (04) then the other positions in the accounts are in RPO										
+Given the TA account 										
+When any one position in the account has a RPO status (04)										
+Then the other positions in the account will be in RPO 										
+And the system will return rpo status = 'Y' for all the positions in the account										
+DATABASE										
+account id	fund id	VAST account number	status code							
+1547896544447	40	88000423272	4							
+4578444596652	56	88001107623	4							
+4578444596652	33	88001107623	1							
+										
+ TABLE:										
+account id	fund id	VAST account number	rpo status							
+1547896544447	40	88000423272	Y							
+4578444596652	56	88001107623	Y							
+4578444596652	33	88001107623	Y							
+										
+Scenario 2: For the TA account, if no positions have RPO status (04) then the rpo status = 'N'										
+Given the TA  account 										
+When no position in the account has active RPO status (04)										
+Then the system will return rpo status = 'N'										
+DATABASE										
+account id	fund id	VAST account number	status code							
+32125520001145	30	88006802266	1							
+54554653231268	2	88000424019	2							
+54554653231268	40	88000424019	1							
+										
+TABLE:										
+account id	fund id	VAST account number	rpo status							
+32125520001145	30	88006802266	N							
+54554653231268	2	88000424019	N							
+54554653231268	40	88000424019	N							
+										
+Scenario 3: If the Brokerage account has restriction type = "RPO%" and effective end date is greater than current date then the account is in RPO 										
+Given the Brokerage account 										
+When the account has RPO restriction (restriction type = "RPO%")										
+And the RPO's effective end date is greater than current date										
+Then the account is in RPO										
+And the system will return rpo status = 'Y'										
+DATABASE										
+account id	BETA account number	restriction type code	restriction effective end date							
+5654631318461	65499297	RPO	12/31/9999							
+										
+TABLE:										
+account id	rpo status 									
+5654631318461	Y									
+										
+Scenario 4: If the Brokerage account have no active RPO restriction then the account is not in RPO										
+Given the Brokerage  account 										
+When the account has no RPO restriction or no active RPO										
+Then the account is not in RPO 										
+And the system will return rpo status = 'N'										
+DATABASE										
+account id	BETA account number	restriction type code	restriction effective end date							
+1131315463213	67261148	RPO	12/31/2019							
+132354641218	30752201	OTC	12/31/9999							
+										
+ TABLE:										
+account id	rpo status 									
+1131315463213	N									
+132354641218	N									
+
+
+Feature 6:  In order to get Escheated status , system will check for the status code (for TA = 05) and restriction (for VBA = ESCH%) on the account 										
+										
+Scenario 1: For the TA account, if any one position have Escheated code (05) then the other positions in the accounts are Escheated										
+Given the TA account 										
+When any one position in the account has Escheated status (05)										
+Then the other positions in the account will be Escheated 										
+And the system will return escheated status = 'Y' for all the positions in the account										
+DATABASE										
+account id	fund id	VAST account number	status code							
+87456847413645	78	88001444959	5							
+488756546465464	302	88000881160	5							
+488756546465464	308	88000881160	1							
+										
+TABLE:										
+account id	fund id	VAST account number	escheated status							
+87456847413645	78	88001444959	Y							
+488756546465464	302	88000881160	Y							
+488756546465464	308	88000881160	Y							
+										
+Scenario 2: For the TA account, if any one position have status code other than 05, then Escheated status = 'N'										
+Given the TA account 										
+When  none of the position has Escheated status (05)										
+Then the system will return escheated status = 'N'										
+DATABASE										
+account id	fund id	VAST account number	status code							
+323246544836	40	88254151439	1							
+477784589001	540	88000612355	2							
+477784589001	33	88000612355	1							
+										
+TABLE:										
+account id	fund id	VAST account number	escheated status							
+323246544836	40	88254151439	N							
+477784589001	540	88000612355	N							
+477784589001	33	88000612355	N							
+										
+Scenario 3: If the Brokerage account have restriction type = "ESCH%" and effective end date is greater than current date then the account is Escheated										
+Given the Brokerage account 										
+When the account has Escheated restriction (restriction type = "ESCH%")										
+And the effective end date associated with Escheated restriction is greater than current date										
+Then the account is Escheated										
+And the system will return escheated status = 'Y'										
+DATABASE										
+account id	BETA account number	restriction type code	restriction effective end date							
+7898765411654	78482324	ESCH	12/31/9999							
+										
+ TABLE:										
+account id	escheated status									
+7898765411654	Y									
+										
+Scenario 4: If the Brokerage account have no active Escheated restriction or no Escheated restriction then the account is not Escheated										
+Given the Brokerage account 										
+When the account has no active Escheated restriction or no Escheated restriction										
+Then the account is not  Escheated 										
+And the system will return escheated status = 'N'										
+DATABASE										
+account id	BETA account number	restriction type code	restriction effective end date							
+12546000525	18876262	ESCH	12/31/2019							
+7845794351316	71429306	CTRQ	12/31/9999							
+										
+TABLE:										
+account id	escheated status									
+12546000525	N									
+7845794351316	N									
+
+
+FEATURE 7: When the account has holdings, system will get the fund id, fund long name, ticker symbol, CUSIP, share quantity, market value and market value date associated with all holdings											
+											
+Scenario 1:When the TA account have the Mutual funds, system will get the  fund id, fund long name, ticker symbol, CUSIP , share quantity, market value and market value date for the position having the positive balance 											
+Given the TA account having the Mutual Funds											
+When the position has the positive balance											
+Then the system will get the fund id, fund long name, ticker symbol, CUSIP and share quantity associated with the positive balance position											
+DATABASE											
+account id	fund id	vast account number	fund long name	ticker symbol	CUSIP	share quantity	market value	market value date			
+820070828093832	2	88437806572	Vanguard Value Balanced Index Fund Investor Shares	VBINX	921931101	158.3	41.5	8/20/2020			
+820070828093832	6	88437806572	Vanguard Value Index Fund Investor Shares	VIVAX	922908405	129.29	41.23	8/20/2020			
+816023402005841	573	9894794675	Vanguard Wellington II Fund Admiral Shares	VWNAX	922018304	86,052.17	62.76	8/20/2020			
+434543807232758	0521	9896159247	Vanguard Wellington Fund Admiral Shares	VWENX     	921935201	11138.4	75.79	8/20/2020			
+	33	9897051962	Vanguard Federal Money Market Fund	VMFXX	922906300	0	1	8/20/2020			
+	585	9897051962	Vanguard Total Stock Market Index Fund Admiral Shares	VTSAX		0	83.61	8/20/2020			
+	540	88003101481	Vanguard 500 Index Fund Admiral Shares	VFIAX		92.27	313.16	8/20/2020			
+	30	88003101481	Vanguard Prime Money Market Fund	VMMXX	922906201	0	1	8/20/2020			
+											
+TABLE:											
+account id	fund id	vast account number	fund long name	ticker symbol	CUSIP	share quantity	market value	market value date			
+820070828093832	2	88437806572	Vanguard Value Balanced Index Fund Investor Shares	VBINX	921931101	158.3	41.5	8/20/2020			
+820070828093832	6	88437806572	Vanguard Value Index Fund Investor Shares	VIVAX	922908405	129.29	41.23	8/20/2020			
+816023402005841	573	9894794675	Vanguard Wellington II Fund Admiral Shares	VWNAX	922018304	86,052.17	62.76	8/20/2020			
+434543807232758	0521	9896159247	Vanguard Wellington Fund Admiral Shares	VWENX     	921935201	11138.4	75.79	8/20/2020			
+											
+Scenario 2:For the VBA accounts, system will get the  fund id, fund long name, ticker symbol, CUSIP, share quantity, market value and market value date for all the holdings in the account											
+Given the VBA account											
+When the VBA account have the holdings											
+Then the system will get the fund id, fund long name, ticker symbol, CUSIP and share quantity associated with the holding											
+DATABASE											
+account ID	account number	fund id	vast account number	fund long name	ticker symbol	CUSIP	share quantity	market value	market value date	settlement fund balance	
+836102827161444	13471929			MORGAN STANLEY U.S. GOVERNMENT SECURITIES TRUST CLASS A	USGAX	616969101	1	9.02	8/20/2020		
+836102827161444	13471929	40	88474746679	Vanguard 500 Index Fund Investor Shares	VFINX	922908108	42.19	313.15	8/20/2020		
+836102827161444	13471929			GENPACT LTD	G	G3922B107	1	41.3	8/20/2020		
+836102827161444	13471929	33	88474746679	Vanguard Federal Money Market Fund	VMFXX	922906300				93,127.08	
+453338924133954	54160962	Settlement Fund)                 33		Vanguard Federal Money Market Fund	VMFXX	922906300				0.00	
+62081508125814	86479526			Vanguard Total Bond Market Index Fund Admiral Shares	VBTLX	921937603	198.03	11.68	8/20/2020		
+62081508125814	86479526			Vanguard Total International Stock Index Fund Admiral Shares	VTIAX	‎921909818	0	28.49	8/20/2020		
+62081508125814	86479526			Vanguard Total Stock Market ETF	VTI	922908769	1.17	171.61	8/20/2020		
+62081508125814	86479526			HANSEN MEDICAL OLDCHG INC		41130710	-903				
+62081508125814	86479526	Settlement Fund)                 33		Vanguard Federal Money Market Fund	VMFXX	922906300				100,698.84	
+											
+TABLE:											
+account number	account number	fund id	vast account number	fund long name	ticker symbol	CUSIP	share quantity	market value	market value date	settlement fund balance	
+836102827161444	13471929			MORGAN STANLEY U.S. GOVERNMENT SECURITIES TRUST CLASS A	USGAX	616969101	1	9.02	8/20/2020		
+836102827161444	13471929	40	88474746679	Vanguard 500 Index Fund Investor Shares	VFINX	922908108	42.19	313.15	8/20/2020		
+836102827161444	13471929			GENPACT LTD	G	G3922B107	1	41.3	8/20/2020		
+836102827161444	13471929	1398	88474746679	Vanguard Federal Money Market Fund	VMFXX	922906300				93,127.08	
+62081508125814	86479526			Vanguard Total Bond Market Index Fund Admiral Shares	VBTLX	921937603	198.03	11.68	8/20/2020		
+62081508125814	86479526			Vanguard Total Stock Market ETF	VTI	922908769	1.17	171.61	8/20/2020		
+62081508125814	86479526	Settlement Fund)                 33		Vanguard Federal Money Market Fund	VMFXX	922906300				100,698.84	
+											
+Scenario 3:For the VBS or VBO account, system will get the  fund id, fund long name, ticker symbol, CUSIP, share quantity, market value and market value date associated with all the holdings in the account											
+Given the VBS or VBO  account											
+When the VBS or VBO account have the holdings											
+Then the system will get the fund id, fund long name, ticker symbol, CUSIP and share quantity associated with the holding											
+DATABASE											
+account id	account number	fund id	vast account number	fund long name	ticker symbol	CUSIP	share quantity	market value	market value date		
+78672806152829	31164120			FIDELITY ADVISOR FREEDOM 2005 CL I	FFIVX	315792598	20,010.05	11.86	8/20/2020		
+78672806152829	31164120			FIDELITY ADVISOR FREEDOM 2025	FFTWX	315792663	5,522.83	14.47	8/20/2020		
+78672806152829	31164120	938		VANGUARD SMALL CAP GROWTH ETF	VBK	922908595	15	215.99	8/20/2020		
+78672806152829	31164120	970		VANGUARD TOTAL STOCK MARKET ETF	VTI	922908769	29	171.79	8/20/2020		
+78672806152829	31164120			NIKE INC CL B	NKE	654106103	5	108.01	8/20/2020		
+78672806152829	31164120			FEDL BATL MTG ASSN NOTE CPN 6.16 % M	31359MEA7	31359MEA7	30,000	124.602	8/20/2020		
+78672806152829	31164120			U S TREASURY BILL CPN 0.00000% MTD 201	912796QN2	912796QN2	1,000,000	99.384	8/20/2020		
+78672806152829	31164120			WASHINGTON ST SER S 5 NPFG B/E CMP INT @	939745V85	939745V85	50,000	100	8/20/2020		
+497023417110956	17007025	30		Vanguard Prime Money Market	VMMXX	922906201	207066.69	1	8/20/2020		
+497023417110956	17007025			BARNES GROUP INC	G	6780610	1	38.38	8/20/2020		
+497023417110956	17007025			GENPACT LTD	G	G3922B107	1	41.3	8/20/2020		
+497023417110956	17007025			XEROX CORP OLDCHG	G	98421M106	1				
+											
+TABLE:											
+account id	account number	fund id	vast account number	fund long name	ticker symbol	CUSIP	share quantity	market value	market value date		
+78672806152829	31164120			FIDELITY ADVISOR FREEDOM 2005 CL I	FFIVX	315792598	20,010.05	11.86	8/20/2020		
+78672806152829	31164120			FIDELITY ADVISOR FREEDOM 2025	FFTWX	315792663	5,522.83	14.47	8/20/2020		
+78672806152829	31164120	938		VANGUARD SMALL CAP GROWTH ETF	VBK	922908595	15	215.99	8/20/2020		
+78672806152829	31164120	970		VANGUARD TOTAL STOCK MARKET ETF	VTI	922908769	29	171.79	8/20/2020		
+78672806152829	31164120			NIKE INC CL B	NKE	654106103	5	108.01	8/20/2020		
+78672806152829	31164120			FEDL BATL MTG ASSN NOTE CPN 6.16 % M	31359MEA7	31359MEA7	30,000	124.602	8/20/2020		
+78672806152829	31164120			U S TREASURY BILL CPN 0.00000% MTD 201	912796QN2	912796QN2	1,000,000	99.384	8/20/2020		
+78672806152829	31164120			WASHINGTON ST SER S 5 NPFG B/E CMP INT @	939745V85	939745V85	50,000	100	8/20/2020		
+497023417110956	17007025	30		Vanguard Prime Money Market	VMMXX	922906201	207066.69	1	8/20/2020		
+497023417110956	17007025			BARNES GROUP INC	G	6780610	1	38.38	8/20/2020		
+497023417110956	17007025			GENPACT LTD	G	G3922B107	1	41.3	8/20/2020		
+497023417110956	17007025			XEROX CORP OLDCHG	G	98421M106	1				
+
+FEATURE 8: If the account has a Beneficiary then, system will get the Beneficiary details as first, middle and last name, tax number, relationship type, date of birth, beneficiary design code and % allocation									
+									
+Scenario 1: If the account has a Beneficiary then, system will get the Beneficiary details as first, middle and last name, tax number, relationship type, date of birth, beneficiary design code and % allocation									
+Given the TA or Brokerage account									
+When the account has primary and/ or secondary beneficiary 									
+Then the system will get the beneficiary details as first, middle and last name, tax number, relationship type, date of birth, beneficiary design code and % allocation									
+DATABASE									
+account id	beneficiary first name	beneficiary middle name	beneficiary last name	tax number	 beneficiary type	data of birth	beneficiary design code	% allocation	
+6370410180825			THE SALVATION ARMY MIDLAND DIVISION ST LOUIS MO 63139		P		CHAR	10	
+6370410180825			GREAT CIRCLE BUTTERFIELD SERVICES		P		CHAR	20	
+6370410180825			MARY QUEEN OF PEACE		P		CHAR	20	
+29926814103821					P		CUST	100	
+22912152828					P		DESC	50	
+4825501183754	MARK 	J	 COLLOM		S		ESTA	100	
+1619922152750					S		GRCH	50	
+148925170010	SALLY 	A	DISCHINGER	490587925	P	6/7/1949	INDV	100	
+148925170010	KATHERINE 	L	DISCHINGER	488860020	I	7/24/1979	INDV	50	
+148925170010	MARK	D	DISCHINGER	495827692	I	10/4/1976	INDV	50	
+3540927164156	F L O SULLIVAN			307420479	S		OTHR	100	
+195828123458					P		SPSE	100	
+242326111758			THE ELIZABETH A ROWLAND TRUST		S		TRUA	100	
+2364926105156			SVETLANA BOSTICK		S		TRUW	100	
+18610214601					P		VGID	100	
+									
+TABLE									
+account id	beneficiary first name	beneficiary middle name	beneficiary last name	tax number	relationship beneficiary type	data of birth	beneficiary design code	% allocation	
+6370410180825			THE SALVATION ARMY MIDLAND DIVISION ST LOUIS MO 63139		P		CHAR	10	
+6370410180825			GREAT CIRCLE BUTTERFIELD SERVICES		P		CHAR	20	
+6370410180825			MARY QUEEN OF PEACE		P		CHAR	20	
+29926814103821					P		CUST	100	
+22912152828					P		DESC	50	
+4825501183754	MARK 	J	 COLLOM		S		ESTA	100	
+1619922152750					S		GRCH	50	
+148925170010	SALLY 	A	DISCHINGER	490587925	P	6/7/1949	INDV	100	
+148925170010	KATHERINE 	L	DISCHINGER	488860020	I	7/24/1979	INDV	50	
+148925170010	MARK	D	DISCHINGER	495827692	I	10/4/1976	INDV	50	
+3540927164156	F L O SULLIVAN			307420479	S		OTHR	100	
+195828123458					P		SPSE	100	
+242326111758			THE ELIZABETH A ROWLAND TRUST		S		TRUA	100	
+2364926105156			SVETLANA BOSTICK		S		TRUW	100	
+18610214601					P		VGID	100	
+
+FEATURE: Get  the Email address status, bounce back indicator and Email address associated with the client id.									
+									
+Scenario 1:Get the  primary email address and email status for the all the owners on the account									
+Given the client id									
+When the client has the email address									
+Then system will get the primary email address of the client									
+And the email status as X -  Excluded , R - Rejected, M - Mail sent and U - Untested									
+DATABASE									
+account id	role code	email address	email status	sem_status_code	client id	client type	bounce back indicator		
+571465231015657	PRRT	marc_posegay@vanguard.com	ACTV	U	1380665314	P	N		
+571465231015657	SHSH	marc_posegay@vanguard.com	ACTV	U	1380665314	P	N		
+571465231015657	BNBN				667026344	P			
+485935611095421	SHSH	nesay_udai_kumar_boda@np-vanguard.com	ACTV	X	2005212906	P	Y		
+485935611095142	TRTR	chenin8326@vgitest.com	ACTV	U	389122461	P	N		
+TABLE:									
+account id	role code	email address	email status	sem_status_code	bounce back indicator				
+571465231015657	PRRT	marc_posegay@vanguard.com	ACTV	U	N				
+571465231015657	SHSH	marc_posegay@vanguard.com	ACTV	U	N				
+571465231015657	BNBN								
+485935611095421	SHSH	nesay_udai_kumar_boda@np-vanguard.com	ACTV	X	Y				
+485935611095142	TRTR	chenin8326@vgitest.com	ACTV	U	N				
+										

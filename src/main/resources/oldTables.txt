@@ -1,0 +1,8 @@
+retail_abxmaster.five_owners
+retail_abxmaster2.account_base
+retail_abxmaster2.account_beneficiary
+retail_abxmaster2.account_contact_event
+retail_abxmaster2.account_detail
+retail_abxmaster2.account_owner
+retail_abxmaster2.client_contact_event
+retail_abxmaster2.ta_holding

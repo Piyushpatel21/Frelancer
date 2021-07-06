@@ -1,0 +1,16 @@
+<assembly>
+    <id>payload</id>
+    <formats>
+        <format>dir</format>
+    </formats>
+    <includeBaseDirectory>false</includeBaseDirectory>
+    <files>
+        <file>
+            <source>target/abandoned-property-glue-app-jar-with-dependencies.jar</source>
+            <destName>abandoned-property-glue-app.jar</destName>
+        </file>
+        <file>
+            <source>src/main/scala/com/vanguard/rdna/abx/AbandonedPropertyApp.scala</source>
+        </file>
+    </files>
+</assembly>

@@ -1,0 +1,14 @@
+{
+  "reviewers": [
+    {
+      "requiredReviewers": [
+        "UIW9",
+        "U5QL",
+        "UO1E",
+        "UCOX",
+        "U3II"
+      ],
+      "numberRequired": 1
+    }
+  ]
+}
